@@ -90,7 +90,8 @@ Again, this is NOT secure!
 ./generator -i bip39_words.txt -l 1 -p
 ```
 
-Words that lack prefixes or suffixes can be created using the above method or my other library called wandian. These methods can create any password dictionary. For a comprehensive dictionary containing all human characters, download the Unicode character table. which includes all known character sets. Alternatively, simpler dictionaries can be created, such as those with English letters as prefixes and numbers as suffixes, using a combination password dictionary.
+Words that lack prefixes or suffixes can be created using the above method or my other library called wandian.（https://github.com/8891689/Password-Dictionary-Generator ）。
+These methods can create any password dictionary. For a comprehensive dictionary containing all human characters, download the Unicode character table. which includes all known character sets. Alternatively, simpler dictionaries can be created, such as those with English letters as prefixes and numbers as suffixes, using a combination password dictionary.
 
 
 # Note: -l 1 here just makes the program iterate once; the output key is independent of dictionary/length.
