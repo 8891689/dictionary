@@ -15,7 +15,11 @@ It is used to generate word combinations or simulate Bitcoin private keys (hexad
 Assuming your C source code file is named `generator.c`, you can compile it using GCC (or another C compiler):
 
 ```bash
-gcc -O2 generator.c -o generator
+gcc generator.c -march=native -O3 -o generator
+
+or
+
+gcc combination_dictionary.c -march=native -O3 -o cd
 
 ```
 
@@ -24,6 +28,10 @@ This will generate an executable file named generator.
 # Usage
 ```
 ./generator -i <dictionary_path> -l <length_specifier> [-k] [-R] [-p]
+
+or
+
+./cd -q <prefix_file> -h <suffix_file> -R Enable random mode
 ```
 
 # Options:
@@ -41,12 +49,15 @@ Can be a range, e.g., 3-5 (will generate combinations of length 3, 4, and 5).
 -R: (Optional) Random read mode. For each output generated, selects words randomly from the dictionary instead of sequentially. Note: The program still iterates through the combination indices internally to determine when to stop.
 
 -p: (Optional) Private key mode. Outputs 64-character hexadecimal strings simulating Bitcoin private keys instead of word combinations. Warning: This mode uses rand() for generation, which is not cryptographically secure. Do not use this for generating real private keys!
+-q Prefix vocabulary
+
+-h Suffix vocabulary
 
 # Combining Character Sets for Advanced Use 
 
 ./generator -i my_dictionary.txt -l 3-5 | ./brainflayer -v -b hash160.blf -f hash160.bin -t priv -x -c uce > key.txt
 
-
+./cd -q my_dictionary.txt -h my_dictionary.txt -R | ./brainflayer -v -b hash160.blf -f hash160.bin -t priv -x -c uce > key.txt
 
 # Examples
 
