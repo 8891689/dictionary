@@ -31,7 +31,7 @@ This will generate an executable file named generator.
 
 or
 
-./cd -q <prefix_file> -h <suffix_file> -R Enable random mode
+./cd -q <prefix_file> -h <suffix_file> [-R] Enable random mode
 ```
 
 # Options:
@@ -49,6 +49,7 @@ Can be a range, e.g., 3-5 (will generate combinations of length 3, 4, and 5).
 -R: (Optional) Random read mode. For each output generated, selects words randomly from the dictionary instead of sequentially. Note: The program still iterates through the combination indices internally to determine when to stop.
 
 -p: (Optional) Private key mode. Outputs 64-character hexadecimal strings simulating Bitcoin private keys instead of word combinations. Warning: This mode uses rand() for generation, which is not cryptographically secure. Do not use this for generating real private keys!
+
 -q Prefix vocabulary
 
 -h Suffix vocabulary
@@ -89,6 +90,7 @@ Again, this is NOT secure!
 ./generator -i bip39_words.txt -l 1 -p
 ```
 
+Words lacking prefixes or suffixes can be created using the methods mentioned above or through my additional Kuwan Dictionary. These methods allow the creation of any password dictionary. For a comprehensive dictionary encompassing all human characters, download the Unicode character table, which includes all known character sets. Alternatively, simpler dictionaries can be created, such as those with English letters as prefixes and numbers as suffixes, using a combination password dictionary.
 
 
 # Note: -l 1 here just makes the program iterate once; the output key is independent of dictionary/length.
