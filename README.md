@@ -15,11 +15,11 @@ It is used to generate word combinations or simulate Bitcoin private keys (hexad
 Assuming your C source code file is named `generator.c`, you can compile it using GCC (or another C compiler):
 
 ```bash
-gcc generator.c -march=native -O3 -o generator
+gcc -O3 -march=native generator.c -o generator -lpthread -lm -static
 
 or
 
-gcc combination_dictionary.c -march=native -O3 -o cd
+gcc -O3 -march=native combination_dictionary.c -o cd -lpthread -static
 
 ```
 
@@ -27,14 +27,55 @@ This will generate an executable file named generator.
 
 # Usage
 ```
-./generator -i <dictionary_path> -l <length_specifier> [-k] [-R] [-p]
+./generator -i <dictionary_path> -l <length_specifier> [-k] [-R]
 
 or
 
-./cd -q <prefix_file> -h <suffix_file> [-R] Enable random mode
+./cd -c <prefix_file> -d <suffix_file> [-R] Enable random mode
 ```
 
 # Options:
+```
+./generator -h
+Usage: ./generator -i <dict> -l <len|s-e> [OPTIONS]
+
+A silent, high-performance password generator for pipelining.
+
+Required:
+  -i <path>      Path to a character set or dictionary word file.
+  -l <len|s-e>   Password or word length for (e.g., '12' or a range like '8-12').
+
+Modes:
+  (default)      Sequential Generation.
+  -R             Random Generation.
+
+Options:
+  -n <number>    Number of items for Random Mode default: infinite.
+  -t <threads>   Number of threads to use (default: 1).
+  -o <file>      Output file path (default: stdout).
+  -k             There is no space between the word and the password. result
+  -h             Show this help message.
+
+ author：        https://github.com/8891689
+Speed test: ./generator -i bip39.txt -l 10 -t 8 | pv > /dev/null
+```
+```
+
+./cd -h
+Usage: ./cd -c <prefix_file> -d <suffix_file> [OPTIONS]
+A password generator that combines prefix and suffix passwords or words into a password.
+
+Required:
+  -c <file>   Path to the prefix file.
+  -d <file>   Path to the suffix file.
+
+Options:
+  -R          Enable Random mode (runs infinitely). Default: sequential.
+  -t <num>    Number of threads to use (default: 1).
+  -h          Show this help message.
+ author：     https://github.com/8891689
+```
+
 
 -i <dictionary_path>: (Required) Specifies the dictionary file containing the word list. The file should be plain text with one word per line.
 
@@ -48,17 +89,16 @@ Can be a range, e.g., 3-5 (will generate combinations of length 3, 4, and 5).
 
 -R: (Optional) Random read mode. For each output generated, selects words randomly from the dictionary instead of sequentially. Note: The program still iterates through the combination indices internally to determine when to stop.
 
--p: (Optional) Private key mode. Outputs 64-character hexadecimal strings simulating Bitcoin private keys instead of word combinations. Warning: This mode uses rand() for generation, which is not cryptographically secure. Do not use this for generating real private keys!
 
--q Prefix vocabulary
+-c Prefix vocabulary
 
--h Suffix vocabulary
+-d Suffix vocabulary
 
 # Combining Character Sets for Advanced Use 
 
 ./generator -i my_dictionary.txt -l 3-5 | ./brainflayer -v -b hash160.blf -f hash160.bin -t priv -x -c uce > key.txt
 
-./cd -q my_dictionary.txt -h my_dictionary.txt -R | ./brainflayer -v -b hash160.blf -f hash160.bin -t priv -x -c uce > key.txt
+./cd -c my_dictionary.txt -d my_dictionary.txt -R | ./brainflayer -v -b hash160.blf -f hash160.bin -t priv -x -c uce > key.txt
 
 # Examples
 
@@ -84,11 +124,27 @@ Generate length 4 combinations, selecting words randomly:
 ./generator -i my_dictionary.txt -l 4 -R
 ```
 
-Generate mock Bitcoin private keys (hex), ignoring dictionary content (but dictionary and length are still needed for iteration):
-Again, this is NOT secure!
+# E5 2697 V4 2.3 single-threaded test
+
 ```
-./generator -i bip39_words.txt -l 1 -p
+./generator -i Taiwan.txt -l 5 -R | pv > /dev/null
+57GiB 0:00:08 [ 202MiB/s] [                  <=>                                                                                               ]
+^C
+
+./generator -i Taiwan.txt -l 5 | pv > /dev/null
+C20GiB 0:00:14 [ 306MiB/s] [                               <=>                                                                                  ]
+^
+
+./cd -c 7000zhongwen.txt -d 41975unicode.txt | pv > /dev/null
+1.90GiB 0:00:06 [ 313MiB/s] [               <=>                                                                                                  ]
+
+./cd -c 7000zhongwen.txt -d 41975unicode.txt -R | pv > /dev/null
+25GiB 0:00:15 [ 249MiB/s] [                                 <=>                                                                                ]
+^C
+
 ```
+Not fast enough? You can enable 10 threads, which would increase the speed tenfold. Several gigabytes of data per second can fill a multi-terabyte hard drive in 1,000 seconds.
+
 
 Words that lack prefixes or suffixes can be created using the above method or my other library called wandian.（https://github.com/8891689/Password-Dictionary-Generator ）。
 These methods can create any password dictionary. For a comprehensive dictionary containing all human characters, download the Unicode character table. which includes all known character sets. Alternatively, simpler dictionaries can be created, such as those with English letters as prefixes and numbers as suffixes, using a combination password dictionary.
@@ -96,12 +152,6 @@ These methods can create any password dictionary. For a comprehensive dictionary
 
 # Note: -l 1 here just makes the program iterate once; the output key is independent of dictionary/length.
 # You can use a larger range for -l to generate more mock keys.
-
-# Important Notes
-
-Security Warning: The private keys generated with the -p option use the standard C library's rand() function, which is not a cryptographically secure random number generator. Absolutely do not use the hexadecimal strings generated by this tool for any real cryptocurrency wallets or security-related applications.
-
-Performance: Generating all combinations (especially in the default non-random mode) can take a very long time and consume significant resources, particularly with large dictionaries and long combination lengths.
 
 Dictionary File Format: Ensure the file specified with -i is a plain text file, contains only one word per line, and uses the line endings expected by your system (e.g., LF or CRLF).
 
