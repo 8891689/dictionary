@@ -1,14 +1,13 @@
 # Password Dictionary
 
-It is used to generate word combinations or simulate Bitcoin private keys (hexadecimal strings) based on the provided dictionary file. Its strength depends on your word document. Assuming that your document contains all the words or character sets in the world, it can generate any password in the world.
+It generates word and password combinations based on a provided dictionary or character set file. Its strength depends on the text file you provide. Assuming your file contains every word or character set in the world, it can generate any password. For example, using the character table unicode.txt, it is theoretically possible to generate any password from known characters.
 
 ## Features
 
-*   Reads a word list from a specified dictionary file.
-*   Generates word combinations based on specified lengths (or a range of lengths).
-*   Optionally removes spaces between words in the output.
-*   Optionally selects words randomly from the dictionary for each output (while still iterating through combinations internally to determine the total number of outputs).
-*   Optionally outputs simulated (**non-secure**) Bitcoin private key hexadecimal strings instead of word combinations.
+*   Reads a word list including a character set from the specified dictionary file.
+*   Generates word or password combinations of a specified length (or range of lengths).
+*   Optionally removes spaces between words or password combinations in the output.
+*   Optionally selects a random word from the dictionary for each output (while still iterating over the combinations internally to determine the total number of outputs).
 
 ## Compilation
 
@@ -150,10 +149,9 @@ Words that lack prefixes or suffixes can be created using the above method or my
 These methods can create any password dictionary. For a comprehensive dictionary containing all human characters, download the Unicode character table. which includes all known character sets. Alternatively, simpler dictionaries can be created, such as those with English letters as prefixes and numbers as suffixes, using a combination password dictionary.
 
 
-# Note: -l 1 here just makes the program iterate once; the output key is independent of dictionary/length.
-# You can use a larger range for -l to generate more mock keys.
+# You can use a larger -l range to generate more simulated keys.
 
-Dictionary File Format: Ensure the file specified with -i is a plain text file, contains only one word per line, and uses the line endings expected by your system (e.g., LF or CRLF).
+Dictionary file format: Make sure the file specified with -i is a plain text file containing only one word or character set per line.
 
 # Sponsorship
 If this project was helpful to you, please buy me a coffee. Your support is greatly appreciated. Thank you!
