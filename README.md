@@ -76,18 +76,17 @@ Options:
 ```
 
 
--i <dictionary_path>: (Required) Specifies the dictionary file containing the word list. The file should be plain text with one word per line.
+-i <dictionary_path>: (Required) Specifies a dictionary file containing a list of words or character sets. This file should be plain text, with one word per line.
 
--l <length_specifier>: (Required) Specifies the length (number of words) for the combinations to be generated.
+-l <length_specifier>: (Required) Specifies the length of the combination to generate (number of words or passwords).
 
-Can be a single number, e.g., 12.
+Can be a single number, such as 12.
 
-Can be a range, e.g., 3-5 (will generate combinations of length 3, 4, and 5).
+Can be a range, such as 3-5 (which will generate combinations of lengths 3, 4, and 5).
 
--k: (Optional) Removes the separating spaces between words in the output.
+-k: (Optional) Removes spaces between words in the output.
 
--R: (Optional) Random read mode. For each output generated, selects words randomly from the dictionary instead of sequentially. Note: The program still iterates through the combination indices internally to determine when to stop.
-
+-R: (Optional) Random read mode. For each output generated, a word (or character) is randomly selected from the dictionary, rather than sequentially. Note: The program still iterates over the combination index internally to determine when to stop.
 
 -c Prefix vocabulary
 
